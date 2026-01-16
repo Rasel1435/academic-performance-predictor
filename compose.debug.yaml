@@ -1,0 +1,13 @@
+services:
+  academicperformancepredictor:
+    image: academicperformancepredictor
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    # Use uvicorn with debugpy so we can debug our FastAPI routes
+    command: ["sh", "-c", "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 -m uvicorn src.web.api:app --host 0.0.0.0 --port 8000"]
+    ports:
+      - "8000:8000" # For the Website
+      - "5678:5678" # For the Debugger
+    volumes:
+      - .:/app # Maps our code so we can edit and debug in real-time

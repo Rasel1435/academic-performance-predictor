@@ -1,0 +1,13 @@
+services:
+  academicperformancepredictor:
+    image: academicperformancepredictor
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8000:8000"  # Maps our computer's port 8000 to the Docker port 8000
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - .:/app  # Optional: Allows us to see code changes without rebuilding the image 

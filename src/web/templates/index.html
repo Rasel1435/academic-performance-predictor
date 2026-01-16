@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Predictor Pro</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="glass-card p-4 shadow-lg">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="text-primary m-0">🎓 Student Life Predictor</h2>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="resetForm()">Reset
+                            Defaults</button>
+                    </div>
+
+                    <form action="/predict" method="post" id="predictorForm">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <h5 class="section-title">Daily Time Allocation (24h Limit)</h5>
+                            </div>
+
+                            {% for id, label, max, default in [
+                            ('study_hours', 'Study Hours', 16, 4),
+                            ('social_media', 'Social Media', 12, 2),
+                            ('netflix', 'Netflix Hours', 12, 1),
+                            ('sleep', 'Sleep Hours', 12, 8)
+                            ] %}
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label d-flex justify-content-between">
+                                    {{ label }} <span id="{{ id }}_val" class="value-badge">0</span>
+                                </label>
+                                <input type="range" step="0.5" name="{{ id }}" id="{{ id }}"
+                                    class="form-range time-input" min="0" max="{{ max }}" value="{{ default }}"
+                                    oninput="updateUI('{{ id }}')">
+                            </div>
+                            {% endfor %}
+
+                            <div class="col-12">
+                                <h5 class="section-title mt-3">Academic & Lifestyle Metrics</h5>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label d-flex justify-content-between">
+                                    Attendance % <span id="attendance_val" class="value-badge bg-success">85</span>
+                                </label>
+                                <input type="range" name="attendance" id="attendance" class="form-range" min="0"
+                                    max="100" value="85" oninput="updateUI('attendance')">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label d-flex justify-content-between">
+                                    Exercise (0-5) <span id="exercise_val" class="value-badge bg-success">3</span>
+                                </label>
+                                <input type="range" name="exercise" id="exercise" class="form-range" min="0" max="5"
+                                    value="3" oninput="updateUI('exercise')">
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label d-flex justify-content-between">
+                                    Mental Health Rating (0-10) <span id="mental_health_val"
+                                        class="value-badge bg-info">5</span>
+                                </label>
+                                <input type="range" name="mental_health" id="mental_health" class="form-range" min="0"
+                                    max="10" value="5" oninput="updateUI('mental_health')">
+                            </div>
+                        </div>
+
+                        <div id="hourWarning" class="alert alert-custom-warning d-none mt-3">
+                            <strong>⚠️ Time Overload:</strong> Total time allocated exceeds 24 hours. Please adjust your
+                            sliders.
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" id="submitBtn" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                                Analyze My Performance
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if prediction %}
+                    <div
+                        class="prediction-container mt-4 p-4 text-center animate-up {% if prediction > 75 %}pass-bg{% elif prediction < 50 %}fail-bg{% endif %}">
+                        <div class="display-3 fw-bold">{{ prediction }}%</div>
+                        <p class="mb-0">Estimated Academic Performance Score</p>
+
+                        <button type="button" class="btn btn-custom-dl btn-sm mt-3 no-print" onclick="window.print()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                class="bi bi-download me-2" viewBox="0 0 16 16">
+                                <path
+                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                <path
+                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                            </svg>
+                            Download PDF Report
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        const defaults = {
+            study_hours: 4, social_media: 2, netflix: 1, sleep: 8,
+            attendance: 85, exercise: 3, mental_health: 5
+        };
+
+        function updateUI(id) {
+            const val = document.getElementById(id).value;
+            const display = document.getElementById(id + '_val');
+            if (display) display.innerText = val;
+            checkBalance();
+        }
+
+        function checkBalance() {
+            const total = ['study_hours', 'social_media', 'netflix', 'sleep']
+                .reduce((acc, id) => acc + parseFloat(document.getElementById(id).value), 0);
+
+            const warning = document.getElementById('hourWarning');
+            const btn = document.getElementById('submitBtn');
+
+            if (total > 24) {
+                warning.classList.remove('d-none');
+                btn.disabled = true;
+                btn.innerText = "Check Your Schedule (Over 24h)";
+                btn.className = "btn btn-secondary btn-lg rounded-pill shadow-sm";
+            } else {
+                warning.classList.add('d-none');
+                btn.disabled = false;
+                btn.innerText = "Analyze My Performance";
+                btn.className = "btn btn-primary btn-lg rounded-pill shadow-sm";
+            }
+        }
+
+        function resetForm() {
+            Object.keys(defaults).forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.value = defaults[id];
+                    updateUI(id);
+                }
+            });
+        }
+
+        window.onload = () => Object.keys(defaults).forEach(updateUI);
+    </script>
+</body>
+
+</html>
