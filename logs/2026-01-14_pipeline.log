@@ -1,0 +1,75 @@
+20:23:55 | INFO     | ML_Pipeline | ==> Starting ETL Feature Pipeline...
+
+20:23:55 | INFO     | ML_Pipeline | ==> Starting data ingestion process...
+20:23:55 | INFO     | ML_Pipeline | 
+==============================
+DATA INGESTION REPORT
+==============================
+Source: student_habits_performance.csv
+Rows: 1000 | Columns: 16
+File Integrity: PASS
+Columns Found: ['student_id', 'age', 'gender', 'study_hours_per_day', 'social_media_hours']... (Total 16)
+==============================
+20:23:55 | INFO     | ML_Pipeline | ==> Data ingestion process completed successfully.
+
+
+20:23:55 | INFO     | ML_Pipeline | ==> Starting data cleaning process...
+20:23:56 | INFO     | ML_Pipeline | 
+==============================
+DATA CLEANING REPORT
+==============================
+Rows: 1000 | Columns: 16
+Duplicates Removed: 0
+Remaining Nulls: 0
+Data Cleanliness: PASS
+==============================
+20:23:56 | INFO     | ML_Pipeline | ==> Data cleaning process completed successfully.
+
+
+20:23:56 | INFO     | ML_Pipeline | ==> Starting Feature Engineering...
+20:23:56 | INFO     | ML_Pipeline | ==> Feature Engineering: Removed 'student_id'.
+20:23:56 | INFO     | ML_Pipeline | ==> Ordinal Encoding complete for Education, Internet, and Diet.
+20:23:56 | INFO     | ML_Pipeline | ==> One-Hot Encoding complete for Gender.
+20:23:56 | INFO     | ML_Pipeline | ==> Binary Encoding complete for Job and Participation.
+20:23:56 | INFO     | ML_Pipeline | 
+==============================
+FEATURE ENGINEERING REPORT
+==============================
+Rows: 1000 | Columns: 16
+Dtypes: {dtype('int64'): 10, dtype('float64'): 6}
+Columns: ['age', 'study_hours_per_day', 'social_media_hours', 'netflix_hours', 'part_time_job', 'attendance_percentage', 'sleep_hours', 'diet_quality', 'exercise_frequency', 'parental_education_level', 'internet_quality', 'mental_health_rating', 'extracurricular_participation', 'exam_score', 'gender_Male', 'gender_Other']
+==============================
+20:23:56 | INFO     | ML_Pipeline | ==> Feature Engineering completed successfully.
+
+
+20:23:56 | INFO     | ML_Pipeline | ==> Starting Feature Selection...
+20:23:56 | INFO     | ML_Pipeline | 
+==============================
+FEATURE SELECTION REPORT
+==============================
+Original Features: 16
+Selected Features: 8
+Features Dropped:  8
+Target Variable:   exam_score
+Final Columns:     ['study_hours_per_day', 'social_media_hours', 'netflix_hours', 'attendance_percentage', 'sleep_hours', 'exercise_frequency', 'mental_health_rating', 'exam_score']
+==============================
+20:23:56 | INFO     | ML_Pipeline | ==> Feature Selection completed successfully.
+
+
+20:23:56 | INFO     | ML_Pipeline | ==> Starting Model Training...
+20:23:56 | INFO     | ML_Pipeline | 
+==============================
+MODEL TRAINING REPORT
+==============================
+Best Model:       Linear
+R² Score:         0.8996
+Mean Absolute Error: 4.1139
+Root Mean Squared Error: 5.0745
+==============================
+20:23:56 | INFO     | ML_Pipeline | ==> Model Training completed successfully.
+
+
+20:23:56 | INFO     | ML_Pipeline | Best model saved to models/best_model.pkl
+20:23:56 | INFO     | ML_Pipeline | Scaler saved to models/scaler.pkl
+20:23:56 | INFO     | ML_Pipeline | 
+==> ETL Feature Pipeline completed successfully.
