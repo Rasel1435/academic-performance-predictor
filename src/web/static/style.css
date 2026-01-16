@@ -95,3 +95,45 @@ body {
 }
 
 
+
+
+/* Styling for the footer info */
+.author-footer a:hover {
+    color: #0d6efd !important;
+    transition: 0.3s;
+}
+
+/* IMPORTANT: Hide this section when downloading/printing the report */
+@media print {
+    .author-footer, .repo-link, hr {
+        display: none !important;
+    }
+}
+
+/* Custom color for the author name */
+.author-name {
+    color: #00aaff !important; /* This is a vibrant blue */
+    transition: color 0.3s ease;
+}
+
+/* Add a hover effect to make it interactive */
+.author-name:hover {
+    color: #0088cc !important; /* Slightly darker blue on hover */
+    text-shadow: 0 0 8px rgba(0, 170, 255, 0.4);
+}
+
+
+
+/* Make 'Developed by' label clear and bright */
+.author-info p {
+    color: #ffffff !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+    opacity: 0.9; /* Makes it bright but not distracting */
+}
+
+.author-name {
+    color: #00d2ff !important; /* Your bright blue name */
+    font-size: 1.1rem;
+}
