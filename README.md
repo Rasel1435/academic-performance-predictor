@@ -5,6 +5,9 @@
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)
+[![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/rasel1435/student-predictor)
+
+> 🚀 **Live Demo:** [Try the Academic Performance Predictor on Hugging Face Spaces](https://huggingface.co/spaces/rasel1435/student-predictor)
 
 > A machine learning pipeline designed to analyze student behavioral data and predict academic outcomes. Features data preprocessing, exploratory analysis, and high-accuracy predictive modeling.
 
