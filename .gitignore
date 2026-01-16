@@ -216,8 +216,8 @@ __pycache__/
 src/*.egg-info/
 
 # Logs
-# logs/
-# *.log
+logs/
+*.log
 
 
 __pycache__/
